@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.xescm.carrier</groupId>
+	<artifactId>carrier-mproxy</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>carrier-mproxy</name>
+	<description>Demo project for Spring Boot</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.10.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<edas-sdk.version>1.5.1</edas-sdk.version>
+	</properties>
+
+	<dependencies>
+		<!-- xescm common -->
+		<dependency>
+			<groupId>com.xescm.common</groupId>
+			<artifactId>xescm-core</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.xescm.common</groupId>
+			<artifactId>xescm-base</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<!-- app common -->
+		<dependency>
+			<groupId>com.xescm.trade</groupId>
+			<artifactId>xescm-trade-common</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.xescm.trade</groupId>
+			<artifactId>xescm-trade-edas-api</artifactId>
+			<version>[1.0.0,)</version>
+		</dependency>
+
+		<!-- 极光推送 -->
+		<dependency>
+			<groupId>cn.jpush.api</groupId>
+			<artifactId>jpush-client</artifactId>
+			<version>3.2.19</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.jpush.api</groupId>
+			<artifactId>jiguang-common</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+		<!-- AOP切面工具类 -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.netflix.hystrix</groupId>
+			<artifactId>hystrix-javanica</artifactId>
+			<version>1.5.3</version>
+		</dependency>
+
+		<!-- 这里需要排除SpringBoot的嵌入式tomcat，否则会和tomcat4e插件起冲突，在排除该插件后，需要加入servlet，并标记为provided，防止编译到war包里面 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		<!--热部署-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba.edas</groupId>
+			<artifactId>edas-sdk</artifactId>
+			<version>${edas-sdk.version}</version>
+		</dependency>
+
+		<!-- 添加swagger支持 -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-solr</artifactId>
+		</dependency>
+
+		<!-- Ali - schedulerX -->
+		<dependency>
+			<groupId>com.alibaba.edas</groupId>
+			<artifactId>schedulerX-client</artifactId>
+			<version>1.6.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-pandora</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-hsf</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.hsf</groupId>
+			<artifactId>LightApi</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>local</id>
+			<properties>
+				<profileActive>local</profileActive>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>testing</id>
+			<properties>
+				<profileActive>testing</profileActive>
+			</properties>
+		</profile>
+		<profile>
+			<id>staging</id>
+			<properties>
+				<profileActive>staging</profileActive>
+			</properties>
+		</profile>
+		<profile>
+			<id>production</id>
+			<properties>
+				<profileActive>production</profileActive>
+			</properties>
+		</profile>
+	</profiles>
+
+	<repositories>
+		<!-- 私有库地址-->
+		<repository>
+			<id>my-lib-repo</id>
+			<url>http://60.205.82.135:8081/nexus/content/repositories/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>my-lib-repo-3rdparty</id>
+			<url>http://60.205.82.135:8081/nexus/content/repositories/3rdparty/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>ali-repo</id>
+			<url>http://edas-public.oss-cn-hangzhou.aliyuncs.com/repository</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<!--插件库地址-->
+		<pluginRepository>
+			<id>my-lib-repo</id>
+			<url>http://60.205.82.135:8081/nexus/content/repositories/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>my-lib-repo-3rdparty</id>
+			<url>http://60.205.82.135:8081/nexus/content/repositories/3rdparty/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.taobao.pandora</groupId>
+				<artifactId>pandora-boot-maven-plugin</artifactId>
+				<version>2.1.7.8</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<finalName>carrier-mproxy</finalName>
+	</build>
+
+</project>
